@@ -32,11 +32,12 @@ const saveVersions = async(meta = {})=>{
 }
 const getS3Versions = async()=>{
   try{
-    if(!MINIO_PUBLIC_URI || !DATA_BUCKET) throw('S3 info not provided...')
+    if(!DATA_BUCKET) throw('S3 info not provided...')
     let result = await getMinioObject(DATA_BUCKET, 'versions.json')
     if(result) s3Versions = JSON.parse(result)
   }catch(e){
     log.error('Error getting versions for s3 bucket')
+    log.error(e)
   }
 }
 module.exports = async(versions = {}, meta = {})=>{
