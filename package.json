@@ -5,10 +5,19 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "update": "chmod a+x updategitdependency.sh && ./updategitdependency.sh",
-    "build": "chmod a+x buildtestimage.sh && ./buildtestimage.sh c3pobot-old/discordworker",
-    "prod": "chmod a+x buildprodimage.sh && ./buildprodimage.sh c3pobot-old/discordworker"
+    "update": "./updategitdependency.sh",
+    "build": "./buildtestimage.sh c3pobot/gamedata-s3",
+    "prod": "./buildprodimage.sh c3pobot/gamedata-s3"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "nodemonConfig": {
+    "ignore": ["/app/data"]
+  },
+  "dependencies": {
+    "jszip": "^3.10.1",
+    "logger": "github:c3pobot/logger",
+    "minio": "^7.1.3",
+    "node-fetch": "^2.6.7"
+  }
 }

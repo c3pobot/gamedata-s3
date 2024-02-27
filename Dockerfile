@@ -11,7 +11,7 @@ RUN apk update && \
   # https://github.com/krallin/tini#using-tini
   apk add --no-cache tini && \
   rm -rf /var/cache/apk/*
-
+RUN mkdir -p /app/data
 COPY --from=builder node_modules node_modules/
 COPY package*.json ./
 COPY index.js index.js
