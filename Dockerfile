@@ -9,7 +9,7 @@ ENV NODE_PATH=/app
 RUN apk update && \
   # wrap process in --init in order to handle kernel signals
   # https://github.com/krallin/tini#using-tini
-  apk add --no-cache tini && \
+  apk add --no-cache tini git && \
   rm -rf /var/cache/apk/*
 RUN mkdir -p /app/data
 COPY --from=builder node_modules node_modules/

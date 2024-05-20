@@ -4,5 +4,4 @@ log.setLevel(logLevel);
 process.on('unhandledRejection', (error) => {
   log.error(error)
 });
-global.baseDir = __dirname
 require('./src')

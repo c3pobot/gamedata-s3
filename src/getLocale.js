@@ -37,30 +37,26 @@ const processLocalizationLine = (line) => {
   val = val.replace(/^\[[0-9A-F]*?\](.*)\s+\(([A-Z]+)\)\[-\]$/, (m,p1,p2) => p1);
   return [key, val];
 }
-module.exports = async(version, s3Versions = {})=>{
-  try{
-    log.info(`Getting locale Files for ${version}...`)
-    let count = 0, saveSuccess = 0
-    let data = await GameClient.getLocale(version)
-    if(!data) return
-    let zipped = await (new JSZip())
-          .loadAsync(Buffer.from(data.localizationBundle, 'base64'), { base64:true });
-    data = Object.entries(zipped.files)
-    if(!data) return
-    for(let [lang, content] of data){
-      count++
-      let fileStream = content.nodeStream();
-      let langMap = await processStreamByLine(fileStream);
-      if(!langMap) continue;
-      let status = await saveFile(lang, {version: version, data: langMap})
-      if(status){
-        s3Versions[`${lang}.json`] = version
-        saveSuccess++
-      }
+module.exports = async(version, gitVersions = {})=>{
+  log.info(`Getting locale Files for ${version}...`)
+  let count = 0, saveSuccess = 0
+  let data = await GameClient.getLocale(version)
+  if(!data) return
+  let zipped = await (new JSZip())
+        .loadAsync(Buffer.from(data.localizationBundle, 'base64'), { base64:true });
+  data = Object.entries(zipped.files)
+  if(!data) return
+  for(let [lang, content] of data){
+    count++
+    let fileStream = content.nodeStream();
+    let langMap = await processStreamByLine(fileStream);
+    if(!langMap) continue;
+    let status = await saveFile(lang, {version: version, data: langMap})
+    if(status){
+      gitVersions[`${lang}.json`] = version
+      saveSuccess++
     }
-    log.info(`Retrieved ${saveSuccess}/${count} locale files`)
-    if(count > 0 && count === saveSuccess) return true
-  }catch(e){
-    throw(e)
   }
+  log.info(`Retrieved ${saveSuccess}/${count} locale files`)
+  if(count > 0 && count === saveSuccess) return true
 }

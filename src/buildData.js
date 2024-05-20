@@ -11,23 +11,19 @@ for (const [key, value] of Object.entries(statEnumMap)) {
     localizationMap[value.nameKey] = key;
   }
 }
-module.exports = async(data = {})=>{
-  try{
-    log.info('Building gameData.json')
-    let gameData = {}
-    let statTables = buildStatProgressionList(data.statProgression);
-    gameData.modSetData = buildModSetData(data.statModSet);
-    let { crTables, gpTables } = buildTableData(data.table, data.xpTable);
-    gameData.crTables = crTables;
-    gameData.gpTables = gpTables;
+module.exports = (data = {})=>{
+  log.info('Building gameData.json')
+  let gameData = {}
+  let statTables = buildStatProgressionList(data.statProgression);
+  gameData.modSetData = buildModSetData(data.statModSet);
+  let { crTables, gpTables } = buildTableData(data.table, data.xpTable);
+  gameData.crTables = crTables;
+  gameData.gpTables = gpTables;
 
-    gameData.gearData = buildGearData(data.equipment);
-    gameData.relicData = buildRelicData(data.relicTierDefinition, statTables);
-    gameData.unitData = buildUnitData(data.units, data.skill, statTables);
-    if(Object.values(gameData)?.length === 6) return gameData
-  }catch(e){
-    log.error(e);
-  }
+  gameData.gearData = buildGearData(data.equipment);
+  gameData.relicData = buildRelicData(data.relicTierDefinition, statTables);
+  gameData.unitData = buildUnitData(data.units, data.skill, statTables);
+  if(Object.values(gameData)?.length === 6) return gameData
 }
 function getMasteryMultiplierName(primaryStatID, tags) {
   let primaryStats = {

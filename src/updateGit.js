@@ -59,7 +59,7 @@ const updateGitFile = async(name, version, gitInfo = {})=>{
     if(data?.version && data.version === version){
       let obj = Buffer.from(JSON.stringify(data)).toString('base64')
       let status = await gitClient.push(name, obj, version, gitInfo.sha)
-      console.log(status?.commit?.sha)
+      //console.log(status?.commit?.sha)
       if(status?.commit?.sha) return true
     }
   }catch(e){
