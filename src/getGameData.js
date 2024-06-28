@@ -2,6 +2,7 @@
 const log = require('logger')
 const GameClient = require('./client')
 const saveFile = require('./saveFile')
+const getGasUnits = require('./getGasUnits')
 const saveUnits = async(data = [], gameVersion, gitVersions = {})=>{
   if(data.length === 0) return
   let saveSuccess = 0
@@ -15,7 +16,13 @@ const saveUnits = async(data = [], gameVersion, gitVersions = {})=>{
     gitVersions['units_pve.json'] = gameVersion
     saveSuccess++
   }
-  if(saveSuccess === 2) return true
+  let gasUnits = getGasUnits(data.filter(x=>x.obtainable === true && x.obtainableTime === "0")), gasUnitsSave
+  if(gasUnits?.length > 0) gasUnitsSave = saveFile('units_gas', { version: gameVersion, data: gasUnits })
+  if(gasUnitsSave){
+    gitVersions['units_gas'] = gameVersion
+    saveSuccess++
+  }
+  if(saveSuccess === 3) return true
 }
 const getGameDataSegment = async(gameVersion, segment, gitVersions)=>{
   let count = 0, saveSuccess = 0
